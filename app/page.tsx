@@ -5,6 +5,9 @@ import { PerformanceChart } from "@/components/PerformanceChart";
 import { supabase } from "@/utils/supabase";
 import { subDays, format } from "date-fns";
 
+export const dynamic = 'force-dynamic'; // Prevent static generation errors on Vercel
+export const revalidate = 0;
+
 export default async function Dashboard({ searchParams }: { searchParams: Promise<{ days?: string }> }) {
   const params = await searchParams;
   const days = params?.days || '1';
