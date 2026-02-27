@@ -27,7 +27,7 @@
                 "Typecheck passa"
             ],
             "priority": 2,
-            "passes": false,
+            "passes": true,
             "notes": "Task 1 do usuário"
         },
         {
@@ -41,7 +41,7 @@
                 "Typecheck passa"
             ],
             "priority": 3,
-            "passes": false,
+            "passes": true,
             "notes": ""
         },
         {
