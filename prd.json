@@ -57,7 +57,7 @@
                 "Typecheck passa"
             ],
             "priority": 4,
-            "passes": false,
+            "passes": true,
             "notes": "Task 2 do usuário (Isolamento local no banco)"
         },
         {

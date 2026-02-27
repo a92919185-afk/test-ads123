@@ -5,3 +5,6 @@
 - Inicializado app Next.js usando template tailwind.
 - Limpo layout customizado boilerplate e criado view inicial básica.
 - Nenhuma arquitetura complexa adicionada no boilerplate inicial.
+## 2026-02-27 - US-004
+- Criado rota webhook em app/api/webhooks/ads/route.ts
+**Learnings:** Utilizado SUPABASE_SERVICE_ROLE_KEY localmente na rota para burlar o RLS de forma segura durante o webhook sem necessidade de mockar claims.
