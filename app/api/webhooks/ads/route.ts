@@ -10,9 +10,18 @@ interface WebhookPayload {
     google_ads_account_id: string; // ID oriundo do Ads Script para ligar a conta
     account_name?: string;         // Opcional, nome da conta
     campaign_name: string;
+    budget?: number;
+    status?: string;
+    impressions?: number;
     clicks: number;
     cost: number;
+    conversions?: number;
     conversion_value: number;
+    search_absolute_top_impression_share?: number;
+    search_top_impression_share?: number;
+    search_impression_share?: number;
+    target_cpa?: number;
+    avg_target_cpa?: number;
     date: string; // YYYY-MM-DD
 }
 
@@ -69,10 +78,19 @@ export async function POST(req: Request) {
             .upsert({
                 account_id: accountId,
                 campaign_name: data.campaign_name,
+                budget: data.budget ? Number(data.budget) : 0,
+                status: data.status || 'UNKNOWN',
+                impressions: data.impressions ? Number(data.impressions) : 0,
                 clicks: clicks,
                 cost: cost,
+                conversions: data.conversions ? Number(data.conversions) : 0,
                 conversion_value: conversion_value,
                 profit: profit,
+                search_absolute_top_impression_share: data.search_absolute_top_impression_share ? Number(data.search_absolute_top_impression_share) : 0,
+                search_top_impression_share: data.search_top_impression_share ? Number(data.search_top_impression_share) : 0,
+                search_impression_share: data.search_impression_share ? Number(data.search_impression_share) : 0,
+                target_cpa: data.target_cpa ? Number(data.target_cpa) : 0,
+                avg_target_cpa: data.avg_target_cpa ? Number(data.avg_target_cpa) : 0,
                 date: data.date,
             }, {
                 onConflict: 'account_id,campaign_name,date',
@@ -84,8 +102,9 @@ export async function POST(req: Request) {
         // Retorna string ou json de sucesso pro script. Devolver o Profit calculado pode ser um bônus de log no Google
         return NextResponse.json({ success: true, profit }, { status: 200 });
 
-    } catch (error: any) {
-        console.error('Webhook Error:', error.message);
-        return NextResponse.json({ error: 'Internal Server Error', details: error.message }, { status: 500 });
+    } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        console.error('Webhook Error:', errorMessage);
+        return NextResponse.json({ error: 'Internal Server Error', details: errorMessage }, { status: 500 });
     }
 }

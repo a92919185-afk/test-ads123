@@ -7,24 +7,32 @@ interface DashboardFiltersProps {
 export function DashboardFilters({ currentFilter }: DashboardFiltersProps) {
     const filters = [
         { label: 'Hoje', value: '1' },
-        { label: 'Últimos 7 dias', value: '7' },
-        { label: 'Últimos 30 dias', value: '30' },
+        { label: '7 D', value: '7' },
+        { label: '30 D', value: '30' },
     ];
 
     return (
-        <div className="flex gap-2">
-            {filters.map((filter) => (
-                <Link
-                    key={filter.value}
-                    href={`/?days=${filter.value}`}
-                    className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${currentFilter === filter.value
-                            ? 'bg-blue-600 text-white shadow-sm'
-                            : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
-                        }`}
-                >
-                    {filter.label}
-                </Link>
-            ))}
+        <div className="flex gap-2 bg-neutral-900/50 p-1.5 rounded-lg border border-neutral-800">
+            {filters.map((filter) => {
+                const isActive = currentFilter === filter.value;
+                return (
+                    <Link
+                        key={filter.value}
+                        href={`/?days=${filter.value}`}
+                        // Important next/link optimization for App Router to refresh props:
+                        prefetch={true}
+                        className={`
+                            rounded-md px-4 py-1.5 text-xs font-semibold tracking-wider transition-all duration-200
+                            ${isActive
+                                ? 'bg-neutral-800 text-neutral-100 shadow-[0_0_10px_rgba(255,255,255,0.05)] border border-neutral-700'
+                                : 'bg-transparent text-neutral-500 hover:text-neutral-300 border border-transparent'
+                            }
+                        `}
+                    >
+                        {filter.label}
+                    </Link>
+                );
+            })}
         </div>
     );
 }
