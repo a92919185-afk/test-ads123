@@ -33,10 +33,10 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
   const campaignMetrics = metrics || [];
 
   // Calculate Aggregates
-  const totalProfit = campaignMetrics.reduce((acc, curr) => acc + (Number(curr.profit) || 0), 0);
-  const totalCost = campaignMetrics.reduce((acc, curr) => acc + (Number(curr.cost) || 0), 0);
-  const totalRevenue = campaignMetrics.reduce((acc, curr) => acc + (Number(curr.conversion_value) || 0), 0);
-  const totalClicks = campaignMetrics.reduce((acc, curr) => acc + (Number(curr.clicks) || 0), 0);
+  const totalProfit = campaignMetrics.reduce((acc: number, curr: any) => acc + (Number(curr.profit) || 0), 0);
+  const totalCost = campaignMetrics.reduce((acc: number, curr: any) => acc + (Number(curr.cost) || 0), 0);
+  const totalRevenue = campaignMetrics.reduce((acc: number, curr: any) => acc + (Number(curr.conversion_value) || 0), 0);
+  const totalClicks = campaignMetrics.reduce((acc: number, curr: any) => acc + (Number(curr.clicks) || 0), 0);
 
   // Simple trend logic for demo (comparing to a static baseline or just showing up if profit > 0)
   const profitTrend = totalProfit > 0 ? "up" : "down";
