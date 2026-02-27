@@ -1,0 +1,92 @@
+{
+    "project": "AdsMaster Dashboard",
+    "branchName": "main",
+    "description": "Dashboard para Google Ads utilizando Webhooks de Ingestão via Google Ads Scripts, com foco em isolamento de proxy e indicadores de lucro.",
+    "userStories": [
+        {
+            "id": "US-001",
+            "title": "Inicializar App Next.js + Tailwind",
+            "description": "Como sistema, necessito da base de código em Next.js (App Router) e Tailwind CSS.",
+            "acceptanceCriteria": [
+                "Criar projeto Next.js com App Router e Tailwind",
+                "Limpar boilerplate padrão",
+                "Typecheck passa"
+            ],
+            "priority": 1,
+            "passes": true,
+            "notes": ""
+        },
+        {
+            "id": "US-002",
+            "title": "Gerar Schema SQL no Supabase",
+            "description": "Como desenvolvedor, preciso das tabelas essenciais para gerenciar contas e métricas no Supabase.",
+            "acceptanceCriteria": [
+                "Criar arquivo supabase/schema.sql",
+                "Tabela 'accounts' (id, name, created_at)",
+                "Tabela 'campaign_metrics' (id, account_id, campaign_name, clicks, cost, conversion_value, date, profit)",
+                "Typecheck passa"
+            ],
+            "priority": 2,
+            "passes": false,
+            "notes": "Task 1 do usuário"
+        },
+        {
+            "id": "US-003",
+            "title": "Configurar Supabase Client",
+            "description": "Como sistema, preciso conseguir me conectar e fazer queries ao Supabase.",
+            "acceptanceCriteria": [
+                "Instalar pacote @supabase/supabase-js",
+                "Criar utils/supabase.ts (ou arquivo equivalente) para exportar o client",
+                "Criar .env.example com as chaves",
+                "Typecheck passa"
+            ],
+            "priority": 3,
+            "passes": false,
+            "notes": ""
+        },
+        {
+            "id": "US-004",
+            "title": "Construir API Route de Ingestão",
+            "description": "Como um Google Ads Script isolado, preciso conseguir enviar os dados por POST de forma autenticada.",
+            "acceptanceCriteria": [
+                "Criar rota app/api/webhooks/ads/route.ts",
+                "Validar token API_KEY enviado via Header (x-api-key)",
+                "Receber dados JSON: accounts, clicks, cost, conversion_value, date, campaign_name",
+                "Calcular lucro (profit = conversion_value - cost)",
+                "Inserir os dados no Supabase",
+                "Typecheck passa"
+            ],
+            "priority": 4,
+            "passes": false,
+            "notes": "Task 2 do usuário (Isolamento local no banco)"
+        },
+        {
+            "id": "US-005",
+            "title": "Criar Layout e Filtros de Data",
+            "description": "Como usuário do painel, preciso poder rapidamente filtrar métricas entre 1, 7 e 30 dias.",
+            "acceptanceCriteria": [
+                "Dashboard base com componentes estáticos",
+                "Filtros na tela ('Hoje', 'Últimos 7 dias', 'Últimos 30 dias')",
+                "Filtros precisam alterar o estado da URL via query params ou Zustand",
+                "Typecheck passa"
+            ],
+            "priority": 5,
+            "passes": false,
+            "notes": "Foco Visual (Filtros)"
+        },
+        {
+            "id": "US-006",
+            "title": "Criar Tabela com Indicador de Lucro",
+            "description": "Como Gestor de Tráfego, preciso bater o olho e ver verde se der lucro, e vermelho se der prejuízo.",
+            "acceptanceCriteria": [
+                "Buscar métricas do Supabase baseando-se na data selecionada",
+                "Criar tabela visual ou conjunto de cards",
+                "Lógica: se profit > 0 -> cor Verde; se profit <= 0 -> cor Vermelha",
+                "Typecheck passa"
+            ],
+            "priority": 6,
+            "passes": false,
+            "notes": "Foco Visual (Cores e Indicadores)"
+        }
+    ]
+}

@@ -1,0 +1,7 @@
+## Codebase Patterns
+- Usado App Router padrão do Next.js.
+
+## 2026-02-27 - US-001
+- Inicializado app Next.js usando template tailwind.
+- Limpo layout customizado boilerplate e criado view inicial básica.
+- Nenhuma arquitetura complexa adicionada no boilerplate inicial.
