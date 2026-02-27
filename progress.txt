@@ -8,3 +8,6 @@
 ## 2026-02-27 - US-004
 - Criado rota webhook em app/api/webhooks/ads/route.ts
 **Learnings:** Utilizado SUPABASE_SERVICE_ROLE_KEY localmente na rota para burlar o RLS de forma segura durante o webhook sem necessidade de mockar claims.
+## 2026-02-27 - US-006
+- Criado interface Lucro/Status Profit Table e MetricHeader
+**Learnings**: Usei Intl.NumberFormat para currency isolando e cores unificadas padroes com o design system do tailwind (emerald, red) para profit table
