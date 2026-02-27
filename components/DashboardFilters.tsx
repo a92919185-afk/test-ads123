@@ -8,6 +8,7 @@ export function DashboardFilters({ currentFilter }: DashboardFiltersProps) {
     const filters = [
         { label: 'Hoje', value: '1' },
         { label: '7 D', value: '7' },
+        { label: '14 D', value: '14' },
         { label: '30 D', value: '30' },
     ];
 

@@ -1,92 +1,124 @@
 {
-    "project": "AdsMaster Dashboard",
+    "project": "AdsMaster Dashboard v2",
     "branchName": "main",
-    "description": "Dashboard para Google Ads utilizando Webhooks de Ingestão via Google Ads Scripts, com foco em isolamento de proxy e indicadores de lucro.",
+    "description": "Dashboard de Google Ads focado no afiliado fundo de funil, com painel gráfico unificado, visão histórica (1/7/14/30 dias), e sistema visual de 5 cores para alertar lucratividade e tetos de gastos.",
     "userStories": [
         {
             "id": "US-001",
             "title": "Inicializar App Next.js + Tailwind",
             "description": "Como sistema, necessito da base de código em Next.js (App Router) e Tailwind CSS.",
             "acceptanceCriteria": [
-                "Criar projeto Next.js com App Router e Tailwind",
-                "Limpar boilerplate padrão",
+                "Criar projeto Next.js",
+                "Limpar boilerplate",
                 "Typecheck passa"
             ],
             "priority": 1,
             "passes": true,
-            "notes": ""
+            "notes": "Concluído"
         },
         {
             "id": "US-002",
             "title": "Gerar Schema SQL no Supabase",
-            "description": "Como desenvolvedor, preciso das tabelas essenciais para gerenciar contas e métricas no Supabase.",
+            "description": "Como desenvolvedor, preciso das tabelas.",
             "acceptanceCriteria": [
-                "Criar arquivo supabase/schema.sql",
-                "Tabela 'accounts' (id, name, created_at)",
-                "Tabela 'campaign_metrics' (id, account_id, campaign_name, clicks, cost, conversion_value, date, profit)",
-                "Typecheck passa"
+                "Criar supabase/schema.sql"
             ],
             "priority": 2,
             "passes": true,
-            "notes": "Task 1 do usuário"
+            "notes": "Aplicado via MCP"
         },
         {
             "id": "US-003",
             "title": "Configurar Supabase Client",
-            "description": "Como sistema, preciso conseguir me conectar e fazer queries ao Supabase.",
+            "description": "Como sistema, preciso conseguir me conectar e fazer queries.",
             "acceptanceCriteria": [
-                "Instalar pacote @supabase/supabase-js",
-                "Criar utils/supabase.ts (ou arquivo equivalente) para exportar o client",
-                "Criar .env.example com as chaves",
-                "Typecheck passa"
+                "Instalar pacote",
+                "Criar utils"
             ],
             "priority": 3,
             "passes": true,
-            "notes": ""
+            "notes": "Concluído"
         },
         {
             "id": "US-004",
             "title": "Construir API Route de Ingestão",
-            "description": "Como um Google Ads Script isolado, preciso conseguir enviar os dados por POST de forma autenticada.",
+            "description": "Como um Ads Script, preciso enviar os dados.",
             "acceptanceCriteria": [
-                "Criar rota app/api/webhooks/ads/route.ts",
-                "Validar token API_KEY enviado via Header (x-api-key)",
-                "Receber dados JSON: accounts, clicks, cost, conversion_value, date, campaign_name",
-                "Calcular lucro (profit = conversion_value - cost)",
-                "Inserir os dados no Supabase",
-                "Typecheck passa"
+                "Criar rota app/api/webhooks/ads/route.ts"
             ],
             "priority": 4,
             "passes": true,
-            "notes": "Task 2 do usuário (Isolamento local no banco)"
+            "notes": "Concluído"
         },
         {
             "id": "US-005",
             "title": "Criar Layout e Filtros de Data",
-            "description": "Como usuário do painel, preciso poder rapidamente filtrar métricas entre 1, 7 e 30 dias.",
+            "description": "Como usuário do painel, preciso poder filtrar métricas.",
             "acceptanceCriteria": [
-                "Dashboard base com componentes estáticos",
-                "Filtros na tela ('Hoje', 'Últimos 7 dias', 'Últimos 30 dias')",
-                "Filtros precisam alterar o estado da URL via query params ou Zustand",
-                "Typecheck passa"
+                "Dashboard base com componentes"
             ],
             "priority": 5,
             "passes": true,
-            "notes": "Foco Visual (Filtros)"
+            "notes": "Filtros de 1, 7, 30 feitos (Falta o 14)"
         },
         {
             "id": "US-006",
             "title": "Criar Tabela com Indicador de Lucro",
-            "description": "Como Gestor de Tráfego, preciso bater o olho e ver verde se der lucro, e vermelho se der prejuízo.",
+            "description": "Como Gestor, preciso ver a tabela populada.",
             "acceptanceCriteria": [
-                "Buscar métricas do Supabase baseando-se na data selecionada",
-                "Criar tabela visual ou conjunto de cards",
-                "Lógica: se profit > 0 -> cor Verde; se profit <= 0 -> cor Vermelha",
-                "Typecheck passa"
+                "Buscar métricas do Supabase"
             ],
             "priority": 6,
             "passes": true,
-            "notes": "Foco Visual (Cores e Indicadores)"
+            "notes": "Concluído"
+        },
+        {
+            "id": "US-007",
+            "title": "Filtros Estendidos e Dashboard Gráfico",
+            "description": "Como afiliado que roda 30 campanhas, preciso bater o olho em gráficos de Despesas x Retorno e ter opções de filtros de 1, 7, 14 e 30 dias na tela principal.",
+            "acceptanceCriteria": [
+                "Adicionar filtro de 14 dias no DashboardFilters",
+                "Integrar biblioteca de gráficos (ex: Recharts)",
+                "Criar gráfico temporal com Investido vs Retornado e Lucro Geral",
+                "Ajustar layout para priorizar o aspecto visual (bater o olho e entender)",
+                "Typecheck passa"
+            ],
+            "priority": 7,
+            "passes": true,
+            "notes": "Filtro 14D e Gráfico Temporal implementados"
+        },
+        {
+            "id": "US-008",
+            "title": "Sistema de Cores de Performance (5 Níveis)",
+            "description": "Como afiliado fundo de funil, preciso de um termômetro de 5 cores (Verde Escuro, Verde Claro, Amarelo, Vermelho Claro, Vermelho Escuro) indicando se devo pausar ou escalar.",
+            "acceptanceCriteria": [
+                "Definir lógica para Cor 1 (Verde Escuro): ROI brutal / Lucro excelente",
+                "Definir lógica para Cor 2 (Verde Claro): Lucro margem normal",
+                "Definir lógica para Cor 3 (Amarelo): Break-even ou margem apertando",
+                "Definir lógica para Cor 4 (Vermelho Claro/Laranja): Pré-prejuízo, alerta para pausar",
+                "Definir lógica para Cor 5 (Vermelho Escuro): Prejuízo pesado, parada emergencial",
+                "Aplicar essas cores no fundo ou indicadores (badges) da Tabela de Campanhas",
+                "Typecheck passa"
+            ],
+            "priority": 8,
+            "passes": true,
+            "notes": "5 Cores Aplicadas na Profit Table"
+        },
+        {
+            "id": "US-009",
+            "title": "Lógica de Gestão de Risco (Regras de Affiliado)",
+            "description": "Como afiliado, se eu gastar 70% do valor da comissão sem vender, quero alerta. Se eu vender, quero que me avise se meu lucro na campanha baixar de 40% da receita dela.",
+            "acceptanceCriteria": [
+                "Calcular 'Valor Estimado da Comissão' (CPA Alvo ou Receita/Conversões das vendas ativas)",
+                "Ativar Alerta Amarelo/Vermelho se: (Custo > 0.7 * Comissão_Estimada) E Conversões == 0",
+                "Ativar Alerta se: Conversões > 0 E (Lucro < 40% do Custo ou Lucro < 40% do ganho prévio)",
+                "Integrar essa matemática no componente da US-008",
+                "Exibir os valores de teto de gasto pra facilitar a vida",
+                "Typecheck passa"
+            ],
+            "priority": 9,
+            "passes": true,
+            "notes": "Limites de 70% Sem Venda e 40% Com Venda (ROI DROP) totalmente operacionais"
         }
     ]
 }

@@ -1,40 +1,45 @@
 import { DashboardFilters } from "@/components/DashboardFilters";
 import { MetricHeaderCard } from "@/components/MetricHeaderCard";
 import { ProfitTable } from "@/components/ProfitTable";
+import { PerformanceChart } from "@/components/PerformanceChart";
+import { supabase } from "@/utils/supabase";
+import { subDays, format } from "date-fns";
 
-export default async function Dashboard({ searchParams }: { searchParams: { days?: string } }) {
-  const days = await searchParams?.days || '1'; // Await because Next.js 15 searchParams is a Promise
+export default async function Dashboard({ searchParams }: { searchParams: Promise<{ days?: string }> }) {
+  const params = await searchParams;
+  const days = params?.days || '1';
 
-  // MOCK de Exemplo
-  const mockMetrics = [
-    {
-      id: "1",
-      campaign_name: "[SEARCH] Produtos High-Ticket",
-      cost: 500,
-      conversion_value: 2000,
-      profit: 1500,
-      clicks: 120,
-      date: "2026-02-27"
-    },
-    {
-      id: "2",
-      campaign_name: "[PMAX] Fundo de Funil",
-      cost: 1000,
-      conversion_value: 800,
-      profit: -200,
-      clicks: 430,
-      date: "2026-02-27"
-    },
-    {
-      id: "3",
-      campaign_name: "[DISPLAY] Remarketing Abandonados",
-      cost: 150,
-      conversion_value: 950,
-      profit: 800,
-      clicks: 890,
-      date: "2026-02-27"
-    }
-  ];
+  // Calculate the start date based on the selected filter
+  const daysNum = parseInt(days, 10);
+  const startDate = format(subDays(new Date(), daysNum), 'yyyy-MM-dd');
+
+  // Fetch real data from Supabase
+  const { data: metrics, error } = await supabase
+    .from('campaign_metrics')
+    .select(`
+      *,
+      account:accounts(
+        name,
+        google_ads_account_id
+      )
+    `)
+    .gte('date', startDate)
+    .order('date', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching metrics:', error);
+  }
+
+  const campaignMetrics = metrics || [];
+
+  // Calculate Aggregates
+  const totalProfit = campaignMetrics.reduce((acc, curr) => acc + (Number(curr.profit) || 0), 0);
+  const totalCost = campaignMetrics.reduce((acc, curr) => acc + (Number(curr.cost) || 0), 0);
+  const totalRevenue = campaignMetrics.reduce((acc, curr) => acc + (Number(curr.conversion_value) || 0), 0);
+  const totalClicks = campaignMetrics.reduce((acc, curr) => acc + (Number(curr.clicks) || 0), 0);
+
+  // Simple trend logic for demo (comparing to a static baseline or just showing up if profit > 0)
+  const profitTrend = totalProfit > 0 ? "up" : "down";
 
   return (
     <div className="min-h-screen bg-black text-white font-sans selection:bg-neutral-800">
@@ -56,14 +61,48 @@ export default async function Dashboard({ searchParams }: { searchParams: { days
 
         {/* Cards Section */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <MetricHeaderCard title="NET PROFIT" value={2100} isCurrency trend="up" icon="profit" />
-          <MetricHeaderCard title="TOTAL AD SPEND" value={1650} isCurrency icon="cost" />
-          <MetricHeaderCard title="GROSS REVENUE" value={3750} isCurrency icon="conversion" />
-          <MetricHeaderCard title="TOTAL CLICKS" value={1440} icon="click" />
+          <MetricHeaderCard
+            title="NET PROFIT"
+            value={totalProfit}
+            isCurrency
+            trend={profitTrend}
+            icon="profit"
+          />
+          <MetricHeaderCard
+            title="TOTAL AD SPEND"
+            value={totalCost}
+            isCurrency
+            icon="cost"
+          />
+          <MetricHeaderCard
+            title="GROSS REVENUE"
+            value={totalRevenue}
+            isCurrency
+            icon="conversion"
+          />
+          <MetricHeaderCard
+            title="TOTAL CLICKS"
+            value={totalClicks}
+            icon="click"
+          />
         </div>
 
+        {/* Chart Section */}
+        <PerformanceChart metrics={campaignMetrics} />
+
         {/* Table Section */}
-        <ProfitTable metrics={mockMetrics} />
+        <ProfitTable metrics={campaignMetrics} />
+
+        {campaignMetrics.length === 0 && !error && (
+          <div className="mt-12 text-center py-20 border border-dashed border-neutral-800 rounded-2xl">
+            <p className="text-neutral-500 font-mono text-sm uppercase tracking-widest">
+              [ NO DATA TELEMETRY DETECTED IN SELECTED RANGE ]
+            </p>
+            <p className="text-neutral-700 text-xs mt-2">
+              Awaiting payload from Google Ads Script...
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
