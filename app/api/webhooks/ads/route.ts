@@ -28,9 +28,15 @@ interface WebhookPayload {
 export async function POST(req: Request) {
     try {
         // 1. Validar a API_KEY do header
-        const apiKey = req.headers.get('x-api-key');
-        if (!apiKey || apiKey !== process.env.WEBHOOK_API_KEY) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        const apiKey = req.headers.get('x-api-key')?.trim();
+        const expectedKey = process.env.WEBHOOK_API_KEY?.trim();
+
+        console.log('--- DEBUG WEBHOOK ---');
+        console.log('API Key recebida (comprimento):', apiKey?.length);
+        console.log('API Key esperada (configurada na Vercel):', expectedKey ? 'Configurada (OK)' : 'NÃO CONFIGURADA');
+
+        if (!apiKey || apiKey !== expectedKey) {
+            return NextResponse.json({ error: 'Unauthorized', debug: 'Verifique as Env Vars na Vercel' }, { status: 401 });
         }
 
         // 2. Fazer o parse do payload recebido do Google Ads Script

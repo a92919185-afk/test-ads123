@@ -5,7 +5,7 @@
  */
 
 const CONFIG = {
-    WEBHOOK_URL: 'SUA_URL_DO_VERCEL_OU_NGROK/api/webhooks/ads',
+    WEBHOOK_URL: 'https://adsmaster-s4u5.vercel.app/api/webhooks/ads',
     API_KEY: '681049',
     ACCOUNT_ID: AdsApp.currentAccount().getCustomerId()
 };
